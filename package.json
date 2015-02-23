@@ -29,6 +29,10 @@
   },
   "devDependencies": {
     "gulp": "^3.8.10",
-    "shared-sofa-component-tasks": "^0.4.0"
+    "shared-sofa-component-tasks": "^0.11.0"
+  },
+  "dependencies": {
+    "sofa-core": "^0.14.2",
+    "sofa-device-service": "^0.5.1"
   }
 }

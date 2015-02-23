@@ -1,4 +1,4 @@
-angular.module('sofa.inject', [])
+angular.module('sofa.inject')
 
 .directive('sofaInject', function ($templateCache, $http, $compile, injectsService, deviceService) {
 

@@ -1,5 +1,5 @@
 /**
- * angular-sofa-inject - v0.1.1 - Thu Jan 08 2015 16:11:09 GMT+0100 (CET)
+ * angular-sofa-inject - v0.1.0 - Mon Feb 23 2015 12:00:57 GMT+0100 (CET)
  * http://www.sofa.io
  *
  * Copyright (c) 2014 CouchCommerce GmbH (http://www.couchcommerce.com / http://www.sofa.io) and other contributors
@@ -7,7 +7,7 @@
  * IT IS PROVIDED UNDER THE LICENSE TERMS OF THE ATTACHED LICENSE.TXT.
  */
 ;(function (angular) {
-angular.module('sofa.inject', [])
+angular.module('sofa.inject')
 
 .directive('sofaInject', ["$templateCache", "$http", "$compile", "injectsService", "deviceService", function ($templateCache, $http, $compile, injectsService, deviceService) {
 
@@ -42,5 +42,55 @@ angular.module('sofa.inject', [])
             }
         }
     };
+}]);
+
+angular.module('sofa.inject')
+
+.factory('injectsService', ["$location", "configService", function ($location, configService) {
+
+    'use strict';
+
+    var self = {};
+
+    var RESOURCE_URL = configService.get('resourceUrl') + 'html/';
+
+    //we build a map of the injects for faster lookups.
+    var injects = configService
+                    .get('injects', [])
+                    .reduce(function(previous, current){
+                        var key = current.url + '_' + current.target;
+                        previous[key] = {
+                            template: current.template + '.html',
+                            target: current.target
+                        };
+                        return previous;
+                    }, {});
+
+    var getKey = function(injectionPoint, url){
+        return assureUrl(url) + '_' + injectionPoint;
+    };
+
+    var assureUrl = function(url){
+        return url || $location.path();
+    };
+
+    self.hasInject = function(injectionPoint, url){
+        return !cc.Util.isUndefined(injects[getKey(injectionPoint, url)]);
+    };
+
+    self.getTemplate = function(injectionPoint){
+
+        if (self.hasInject(injectionPoint)){
+            return RESOURCE_URL + injects[getKey(injectionPoint)].template;
+        }
+
+        if (self.hasInject(injectionPoint, '*')){
+            return RESOURCE_URL + injects[getKey(injectionPoint, '*')].template;
+        }
+
+        return null;
+    };
+
+    return self;
 }]);
 }(angular));
