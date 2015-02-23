@@ -1,6 +1,6 @@
 {
   "name": "angular-sofa-inject",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Sofa Web SDK Angular Inject component.",
   "main": "dist/sofaInject.js",
   "homepage": "http://www.sofa.io",
